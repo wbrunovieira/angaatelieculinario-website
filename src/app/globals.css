@@ -1,1 +1,163 @@
 @import "tailwindcss";
+
+@theme {
+  --color-linho: #ede7da;
+  --color-linho-escuro: #e2dbcb;
+  --color-mata: #22301f;
+  --color-mata-clara: #2e3f2a;
+  --color-barro: #a8672b;
+  --color-samambaia: #6e7c4a;
+  --color-fumaca: #c9c2b2;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-instrument), system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    @apply bg-linho text-mata font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  ::selection {
+    background: var(--color-barro);
+    color: var(--color-linho);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-barro);
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  /* Títulos em Fraunces: eixo óptico alto e "wonk" ligado para o traço irregular da cerâmica. */
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 144, "SOFT" 60, "WONK" 1;
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  .display-italic {
+    font-style: italic;
+  }
+  /* Cabeça corrida na margem, como num livro. */
+  .running-head {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 14, "SOFT" 30, "WONK" 1;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: var(--color-samambaia);
+  }
+  .prose-anga {
+    max-width: 58ch;
+    text-wrap: pretty;
+  }
+  .prose-anga p + p {
+    margin-top: 1.25em;
+  }
+  .lede {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 48, "SOFT" 40, "WONK" 1;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    text-wrap: pretty;
+  }
+  .link-quiet {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
+    transition: text-decoration-color 0.3s;
+  }
+  .link-quiet:hover {
+    text-decoration-color: currentColor;
+  }
+  .btn-barro {
+    @apply inline-flex items-center gap-3 bg-barro text-linho px-7 py-4 rounded-full;
+    font-size: 1.0625rem;
+    transition: transform 0.4s var(--ease-out-soft), background-color 0.3s;
+  }
+  .btn-barro:hover {
+    background-color: #b8733a;
+    transform: translateY(-2px);
+  }
+  .hairline {
+    border-color: var(--color-fumaca);
+  }
+  .on-dark .hairline {
+    border-color: color-mix(in oklab, var(--color-linho) 18%, transparent);
+  }
+}
+
+/* Abertura: um só momento orquestrado no carregamento. */
+@keyframes hero-settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-image {
+  animation: hero-settle 2.6s var(--ease-out-soft) both;
+}
+.hero-rise {
+  animation: hero-rise 1.2s var(--ease-out-soft) both;
+}
+.hero-rise-2 {
+  animation: hero-rise 1.2s var(--ease-out-soft) 0.35s both;
+}
+.hero-rise-3 {
+  animation: hero-rise 1.2s var(--ease-out-soft) 0.6s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-image,
+  .hero-rise,
+  .hero-rise-2,
+  .hero-rise-3 {
+    animation: none;
+  }
+}
+
+/* Galeria horizontal da casa. */
+.snap-gallery {
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+@media (min-width: 768px) {
+  .snap-gallery {
+    scroll-padding-inline: 2.5rem;
+  }
+}
+.snap-gallery::-webkit-scrollbar {
+  display: none;
+}
+.snap-gallery > * {
+  scroll-snap-align: start;
+}
