@@ -2,7 +2,7 @@ import { site } from "@/lib/site";
 
 export function Footer() {
   return (
-    <footer className="on-dark border-t hairline bg-mata px-5 py-12 text-sm text-linho/70 md:px-10">
+    <footer className="on-dark relative z-10 border-t hairline bg-mata px-5 py-12 text-sm text-linho/70 md:px-10">
       <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="display display-italic text-4xl text-linho">Angá</p>

@@ -1,31 +1,28 @@
-import Image from "next/image";
 import { photos } from "@/content/photos";
+import { Reveal } from "@/components/Reveal";
+import { Frame } from "@/components/Frame";
 
 export function Chef() {
-  const retrato = photos.chef_lydia_jardim_colhendo;
-  const dupla = photos.bruno_lydia_cozinha;
   return (
-    <section id="chef" className="px-5 py-24 md:px-10 md:py-40">
+    <section id="chef" className="relative z-10 bg-linho px-5 py-24 md:px-10 md:py-40">
       <div className="grid gap-12 md:grid-cols-12 md:gap-8">
         <p className="running-head md:col-span-2">A chef</p>
 
         <figure className="md:col-span-4 md:col-start-3">
-          <div className="relative aspect-[4/5] overflow-hidden">
-            <Image
-              src={retrato.src}
-              alt="Lydia Gonzalez no jardim, segurando um pé de cúrcuma recém-colhido"
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              placeholder="blur"
-              blurDataURL={retrato.blur}
-              className="object-cover"
-            />
-          </div>
+          <Frame
+            photo={photos.chef_lydia_jardim_colhendo}
+            alt="Lydia Gonzalez no jardim, segurando um pé de cúrcuma recém-colhido"
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="aspect-[4/5]"
+            speed={0.12}
+          />
         </figure>
 
         <div className="md:col-span-5 md:col-start-8">
-          <h2 className="display text-[clamp(2.4rem,5vw,4.6rem)]">Lydia Gonzalez</h2>
-          <div className="prose-anga mt-8 text-lg">
+          <Reveal as="h2" className="display text-[clamp(2.4rem,5vw,4.6rem)]">
+            Lydia Gonzalez
+          </Reveal>
+          <Reveal mode="fade" delay={0.3} className="prose-anga mt-8 text-lg">
             <p>
               Cresceu em Petrópolis ao redor da avó, que era cozinheira. Saiu aos dezessete para
               estudar gastronomia e passou dezessete anos fora, em cozinhas japonesas, tailandesas,
@@ -37,33 +34,31 @@ export function Chef() {
               cozinha só o que a terra daqui oferece. Faz a própria cerâmica, escolhe os vinhos e
               costuma dizer que a cozinha só tem duas regras.
             </p>
-          </div>
-          <blockquote className="lede mt-12 border-l hairline pl-6">
+          </Reveal>
+          <Reveal as="blockquote" className="lede mt-12 border-l hairline pl-6">
             O pior inimigo de um cozinheiro é a expectativa. O melhor amigo é a fome.
-          </blockquote>
+          </Reveal>
         </div>
       </div>
 
       <div className="mt-24 grid gap-8 md:mt-32 md:grid-cols-12">
         <div className="md:col-span-5 md:col-start-3">
-          <div className="relative aspect-[5/4] overflow-hidden">
-            <Image
-              src={dupla.src}
-              alt="Bruno Sobreira e Lydia Gonzalez na cozinha aberta, montando um prato"
-              fill
-              sizes="(max-width: 768px) 100vw, 42vw"
-              placeholder="blur"
-              blurDataURL={dupla.blur}
-              className="object-cover"
-            />
-          </div>
+          <Frame
+            photo={photos.bruno_lydia_cozinha}
+            alt="Bruno Sobreira e Lydia Gonzalez na cozinha aberta, montando um prato"
+            sizes="(max-width: 768px) 100vw, 42vw"
+            className="aspect-[5/4]"
+            speed={0.1}
+          />
         </div>
         <div className="self-end md:col-span-4 md:col-start-9">
-          <h3 className="display text-3xl">Bruno Sobreira</h3>
-          <p className="prose-anga mt-4 text-mata/85">
+          <Reveal as="h3" className="display text-3xl">
+            Bruno Sobreira
+          </Reveal>
+          <Reveal as="p" mode="fade" delay={0.2} className="prose-anga mt-4 text-mata/85">
             Braço direito da chef e o outro par de mãos que toca o serviço. A cada preparo entrega o
             seu melhor, e a cada serviço, uma piada boba que faz todo mundo rir.
-          </p>
+          </Reveal>
         </div>
       </div>
     </section>

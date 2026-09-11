@@ -2,13 +2,9 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { menuAtual } from "@/content/menu";
 import { site } from "@/lib/site";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const { etapas, season } = menuAtual;
 
@@ -49,7 +45,7 @@ export function Etapas() {
   );
 
   return (
-    <section id="etapas" ref={scope} className="on-dark bg-mata text-linho">
+    <section id="etapas" ref={scope} className="on-dark relative z-10 bg-mata text-linho">
       {/* Versão fixa: desktop com movimento */}
       <div
         data-etapas-track

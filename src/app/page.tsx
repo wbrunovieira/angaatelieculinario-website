@@ -1,5 +1,7 @@
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { Preloader } from "@/components/Preloader";
+import { Cursor } from "@/components/Cursor";
 import { Hero } from "@/components/sections/Hero";
 import { Manifesto } from "@/components/sections/Manifesto";
 import { Etapas } from "@/components/sections/Etapas";
@@ -13,6 +15,8 @@ import { Reservas } from "@/components/sections/Reservas";
 export default function Home() {
   return (
     <>
+      <Preloader />
+      <Cursor />
       <Nav />
       <main>
         <Hero />
@@ -26,6 +30,7 @@ export default function Home() {
         <Reservas />
       </main>
       <Footer />
+      <div className="grain" aria-hidden />
     </>
   );
 }

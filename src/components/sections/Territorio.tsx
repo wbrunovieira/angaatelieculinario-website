@@ -1,37 +1,35 @@
-import Image from "next/image";
 import { territorio } from "@/content/territorio";
+import { Reveal } from "@/components/Reveal";
+import { Frame } from "@/components/Frame";
+import { TerritorioList } from "./TerritorioList";
 
 export function Territorio() {
   return (
-    <section id="territorio" className="px-5 py-24 md:px-10 md:py-40">
+    <section id="territorio" className="relative z-10 bg-linho px-5 py-24 md:px-10 md:py-40">
       <div className="grid gap-10 md:grid-cols-12 md:gap-8">
         <p className="running-head md:col-span-2">Território</p>
         <div className="md:col-span-7 md:col-start-3">
-          <h2 className="display text-[clamp(2.4rem,5vw,4.6rem)]">
+          <Reveal as="h2" className="display text-[clamp(2.4rem,5vw,4.6rem)]">
             Cozinhar a nossa terra e os hábitos da nossa gente é o que nos alegra.
-          </h2>
-          <p className="prose-anga mt-8 text-lg">
+          </Reveal>
+          <Reveal as="p" mode="fade" delay={0.3} className="prose-anga mt-8 text-lg">
             Petrópolis guarda o maior polo de produção orgânica do Rio de Janeiro. A chef visita as
             roças, escolhe fruta por fruta e traz para a mesa ingredientes que quase saíram do
-            repertório brasileiro. Cada um tem uma história. Estas são algumas.
-          </p>
+            repertório brasileiro. Cada um tem uma história.
+          </Reveal>
         </div>
       </div>
 
-      <ul className="mt-20 grid gap-x-8 gap-y-16 sm:grid-cols-2 md:mt-32 md:grid-cols-3">
-        {territorio.map((item, i) => (
-          <li key={item.name} className={i % 3 === 1 ? "md:translate-y-16" : ""}>
-            <div className="relative aspect-[4/5] overflow-hidden">
-              <Image
-                src={item.photo.src}
-                alt={item.name}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                placeholder="blur"
-                blurDataURL={item.photo.blur}
-                className="object-cover"
-              />
-            </div>
+      {/* Desktop: lista com foto flutuante */}
+      <div className="mt-20 hidden md:mt-32 md:block">
+        <TerritorioList />
+      </div>
+
+      {/* Mobile: grade com fotos */}
+      <ul className="mt-16 grid gap-x-6 gap-y-14 sm:grid-cols-2 md:hidden">
+        {territorio.map((item) => (
+          <li key={item.name}>
+            <Frame photo={item.photo} alt={item.name} sizes="(max-width: 640px) 100vw, 50vw" className="aspect-[4/5]" />
             <h3 className="display mt-6 text-3xl">{item.name}</h3>
             <p className="mt-1 text-sm text-samambaia">{item.origin}</p>
             <p className="prose-anga mt-4 text-[0.97rem] text-mata/85">{item.story}</p>
