@@ -13,6 +13,9 @@ export function Cursor() {
     const el = dot.current;
     if (!el || !finePointer() || reducedMotion()) return;
     document.documentElement.classList.add("has-cursor");
+    // Força o reflow: o ponto era display:none até aqui e o GSAP precisa
+    // ler o transform calculado antes de criar os quickTo.
+    void el.offsetWidth;
 
     const x = gsap.quickTo(el, "x", { duration: 0.35, ease: "power3" });
     const y = gsap.quickTo(el, "y", { duration: 0.35, ease: "power3" });
