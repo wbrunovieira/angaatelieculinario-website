@@ -13,12 +13,18 @@ type Props = {
   priority?: boolean;
   // Intensidade do parallax (fração da altura). 0 desliga.
   speed?: number;
-  cursor?: string;
 };
 
 // Moldura de foto: revela de baixo para cima com máscara quando entra na tela
 // e desliza levemente (parallax) enquanto atravessa a janela.
-export function Frame({ photo, alt, sizes, className = "", priority, speed = 0.1, cursor = "Ver" }: Props) {
+export function Frame({
+  photo,
+  alt,
+  sizes,
+  className = "",
+  priority,
+  speed = 0.1,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -50,7 +56,12 @@ export function Frame({ photo, alt, sizes, className = "", priority, speed = 0.1
           {
             yPercent: speed * 100,
             ease: "none",
-            scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
           },
         );
       }
@@ -61,8 +72,12 @@ export function Frame({ photo, alt, sizes, className = "", priority, speed = 0.1
   const bleed = speed > 0 ? `${Math.round(speed * 100)}%` : "0";
 
   return (
-    <div ref={ref} className={`relative overflow-hidden ${className}`} data-cursor={cursor}>
-      <div data-inner className="absolute inset-0" style={{ top: `-${bleed}`, bottom: `-${bleed}` }}>
+    <div ref={ref} className={`relative overflow-hidden ${className}`}>
+      <div
+        data-inner
+        className="absolute inset-0"
+        style={{ top: `-${bleed}`, bottom: `-${bleed}` }}
+      >
         <Image
           src={photo.src}
           alt={alt}

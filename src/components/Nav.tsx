@@ -40,8 +40,21 @@ export function Nav() {
         })
         .set(overlay.current, { pointerEvents: "auto" })
         .to(overlay.current, { yPercent: 0, duration: reduce ? 0 : 0.9 })
-        .from("[data-menu-link]", { yPercent: 110, duration: reduce ? 0 : 0.9, stagger: 0.06, ease: "power4.out" }, "-=0.45")
-        .from("[data-menu-side]", { opacity: 0, y: 20, duration: reduce ? 0 : 0.8, ease: "power3.out" }, "-=0.7");
+        .from(
+          "[data-menu-link]",
+          {
+            yPercent: 110,
+            duration: reduce ? 0 : 0.9,
+            stagger: 0.06,
+            ease: "power4.out",
+          },
+          "-=0.45",
+        )
+        .from(
+          "[data-menu-side]",
+          { opacity: 0, y: 20, duration: reduce ? 0 : 0.8, ease: "power3.out" },
+          "-=0.7",
+        );
     },
     { scope: overlay },
   );
@@ -52,7 +65,9 @@ export function Nav() {
       tl.current?.timeScale(1).play();
       window.__lenis?.stop();
       document.documentElement.classList.add("is-menu");
-      overlay.current?.querySelector<HTMLElement>("[data-menu-link]")?.focus({ preventScroll: true });
+      overlay.current
+        ?.querySelector<HTMLElement>("[data-menu-link]")
+        ?.focus({ preventScroll: true });
     } else {
       tl.current?.timeScale(1.6).reverse();
       window.__lenis?.start();
@@ -81,12 +96,25 @@ export function Nav() {
         data-hero-nav
         className={`fixed inset-x-0 top-0 z-50 text-linho ${open ? "" : "mix-blend-difference"}`}
       >
-        <nav aria-label="Principal" className="flex items-center justify-between px-5 py-5 md:px-10">
-          <Link href="#" className="display display-italic text-2xl leading-none" aria-label="Angá, início" onClick={() => setOpen(false)}>
+        <nav
+          aria-label="Principal"
+          className="flex items-center justify-between px-5 py-5 md:px-10"
+        >
+          <Link
+            href="#"
+            className="display display-italic text-2xl leading-none"
+            aria-label="Angá, início"
+            onClick={() => setOpen(false)}
+          >
             Angá
           </Link>
           <div className="flex items-center gap-8 text-sm">
-            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="link-quiet hidden py-2 sm:inline" data-cursor="Reservar">
+            <a
+              href={site.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-quiet hidden py-2 sm:inline"
+            >
               Reservar
             </a>
             <button
@@ -124,15 +152,28 @@ export function Nav() {
                   className="display block py-1 text-[clamp(2.4rem,7vw,6.5rem)] leading-[1.05] transition-opacity hover:opacity-60"
                   tabIndex={open ? 0 : -1}
                 >
-                  <span className="running-head mr-4 align-top text-linho/70">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="running-head mr-4 align-top text-linho/70">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                   {l.label}
                 </a>
               </li>
             ))}
           </ul>
-          <div data-menu-side className="col-span-12 hidden md:col-span-4 md:col-start-9 md:block">
+          <div
+            data-menu-side
+            className="col-span-12 hidden md:col-span-4 md:col-start-9 md:block"
+          >
             <div className="relative aspect-[4/5] overflow-hidden">
-              <Image src={foto.src} alt="" fill sizes="30vw" placeholder="blur" blurDataURL={foto.blur} className="object-cover" />
+              <Image
+                src={foto.src}
+                alt=""
+                fill
+                sizes="30vw"
+                placeholder="blur"
+                blurDataURL={foto.blur}
+                className="object-cover"
+              />
             </div>
             <dl className="mt-6 space-y-1 text-sm text-linho/85">
               {site.hours.map((h) => (
@@ -143,9 +184,16 @@ export function Nav() {
               ))}
             </dl>
             <p className="mt-6 text-sm text-linho/70">
-              {site.address.street}, {site.address.neighborhood}, {site.address.city}
+              {site.address.street}, {site.address.neighborhood},{" "}
+              {site.address.city}
             </p>
-            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="link-quiet mt-2 inline-block py-1 text-sm" tabIndex={open ? 0 : -1}>
+            <a
+              href={site.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-quiet mt-2 inline-block py-1 text-sm"
+              tabIndex={open ? 0 : -1}
+            >
               Reservar pelo WhatsApp {site.phoneDisplay}
             </a>
           </div>

@@ -1,7 +1,6 @@
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Preloader } from "@/components/Preloader";
-import { Cursor } from "@/components/Cursor";
 import { Hero } from "@/components/sections/Hero";
 import { Manifesto } from "@/components/sections/Manifesto";
 import { Etapas } from "@/components/sections/Etapas";
@@ -19,7 +18,6 @@ export default function Home() {
         Pular para o conteúdo
       </a>
       <Preloader />
-      <Cursor />
       <Nav />
       <main id="conteudo">
         <Hero />

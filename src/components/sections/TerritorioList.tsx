@@ -19,7 +19,10 @@ export function TerritorioList() {
       if (!el || reducedMotion()) return;
       const x = gsap.quickTo(el, "x", { duration: 0.6, ease: "power3" });
       const y = gsap.quickTo(el, "y", { duration: 0.6, ease: "power3" });
-      const rot = gsap.quickTo(el, "rotation", { duration: 0.8, ease: "power3" });
+      const rot = gsap.quickTo(el, "rotation", {
+        duration: 0.8,
+        ease: "power3",
+      });
       let lastX = 0;
       const move = (e: PointerEvent) => {
         x(e.clientX);
@@ -48,7 +51,10 @@ export function TerritorioList() {
 
   return (
     <div ref={scope} className="grid grid-cols-12 gap-8">
-      <ul className="col-span-7 divide-y hairline" onPointerLeave={() => setActive(null)}>
+      <ul
+        className="col-span-7 divide-y hairline"
+        onPointerLeave={() => setActive(null)}
+      >
         {territorio.map((item, i) => (
           <li key={item.name}>
             <button
@@ -58,10 +64,11 @@ export function TerritorioList() {
               className={`display flex w-full items-baseline justify-between gap-6 py-6 text-left text-[clamp(2rem,3.6vw,3.6rem)] transition-opacity duration-500 ${
                 active !== null && active !== i ? "opacity-30" : "opacity-100"
               }`}
-              data-cursor=""
             >
               <span>{item.name}</span>
-              <span className="running-head shrink-0 text-right">{item.origin}</span>
+              <span className="running-head shrink-0 text-right">
+                {item.origin}
+              </span>
             </button>
           </li>
         ))}
@@ -69,7 +76,10 @@ export function TerritorioList() {
 
       <div className="col-span-4 col-start-9">
         <div className="sticky top-32">
-          <p key={shown} className="prose-anga text-lg text-mata/85 animate-[fade_0.6s_ease-out]">
+          <p
+            key={shown}
+            className="prose-anga text-lg text-mata/85 animate-[fade_0.6s_ease-out]"
+          >
             {territorio[shown].story}
           </p>
         </div>
@@ -85,7 +95,15 @@ export function TerritorioList() {
             key={item.name}
             className={`absolute inset-0 overflow-hidden transition-opacity duration-500 ${shown === i ? "opacity-100" : "opacity-0"}`}
           >
-            <Image src={item.photo.src} alt="" fill sizes="20vw" placeholder="blur" blurDataURL={item.photo.blur} className="object-cover" />
+            <Image
+              src={item.photo.src}
+              alt=""
+              fill
+              sizes="20vw"
+              placeholder="blur"
+              blurDataURL={item.photo.blur}
+              className="object-cover"
+            />
           </div>
         ))}
       </div>

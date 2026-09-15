@@ -15,35 +15,44 @@ export function CasaGallery({ items }: { items: Item[] }) {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
-        const track = scope.current?.querySelector<HTMLElement>("[data-track]");
-        if (!track) return;
-        const distance = () => track.scrollWidth - window.innerWidth;
-        gsap.to(track, {
-          x: () => -distance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: scope.current,
-            start: "top top",
-            end: () => `+=${distance()}`,
-            scrub: 0.6,
-            pin: true,
-            invalidateOnRefresh: true,
-            anticipatePin: 1,
-          },
-        });
-        gsap.utils.toArray<HTMLElement>("[data-track] img").forEach((img) => {
-          gsap.fromTo(
-            img,
-            { xPercent: -6 },
-            {
-              xPercent: 6,
-              ease: "none",
-              scrollTrigger: { trigger: scope.current, start: "top top", end: () => `+=${distance()}`, scrub: true },
+      mm.add(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const track =
+            scope.current?.querySelector<HTMLElement>("[data-track]");
+          if (!track) return;
+          const distance = () => track.scrollWidth - window.innerWidth;
+          gsap.to(track, {
+            x: () => -distance(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: scope.current,
+              start: "top top",
+              end: () => `+=${distance()}`,
+              scrub: 0.6,
+              pin: true,
+              invalidateOnRefresh: true,
+              anticipatePin: 1,
             },
-          );
-        });
-      });
+          });
+          gsap.utils.toArray<HTMLElement>("[data-track] img").forEach((img) => {
+            gsap.fromTo(
+              img,
+              { xPercent: -6 },
+              {
+                xPercent: 6,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: scope.current,
+                  start: "top top",
+                  end: () => `+=${distance()}`,
+                  scrub: true,
+                },
+              },
+            );
+          });
+        },
+      );
     },
     { scope },
   );
@@ -59,7 +68,7 @@ export function CasaGallery({ items }: { items: Item[] }) {
             key={g.p.src}
             className={`w-[82vw] shrink-0 sm:w-[60vw] md:w-[38vw] ${i % 2 ? "md:mt-24" : "md:-mt-16"}`}
           >
-            <div className="relative aspect-[4/5] overflow-hidden" data-cursor="Ver">
+            <div className="relative aspect-[4/5] overflow-hidden">
               <Image
                 src={g.p.src}
                 alt={g.alt}

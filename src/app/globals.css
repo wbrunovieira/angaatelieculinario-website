@@ -136,76 +136,14 @@ html.is-menu {
   overflow: hidden;
 }
 
-/* Cursor da casa (só em ponteiro fino). */
-html.has-cursor,
-html.has-cursor a,
-html.has-cursor button,
-html.has-cursor [data-cursor] {
-  cursor: none;
-}
-.cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 120;
-  width: 12px;
-  height: 12px;
-  margin: -6px 0 0 -6px;
-  border-radius: 999px;
-  background: var(--color-linho);
-  mix-blend-mode: difference;
-  pointer-events: none;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
-}
-html.has-cursor .cursor-dot {
-  display: flex;
-}
-.cursor-label {
-  font-family: var(--font-sans);
-  font-size: 2.2px;
-  letter-spacing: 0.02em;
-  color: var(--color-mata);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.cursor-dot.is-big .cursor-label {
-  opacity: 1;
-}
-
 /* Grão de filme, bem sutil, sobre tudo. */
 .grain {
   position: fixed;
-  inset: -6%;
+  inset: 0;
   z-index: 110;
   pointer-events: none;
   opacity: 0.045;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 0.6s steps(4) infinite;
-}
-@keyframes grain {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-2%, 1.5%);
-  }
-  50% {
-    transform: translate(1.5%, -2%);
-  }
-  75% {
-    transform: translate(-1%, -1%);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .grain {
-    animation: none;
-  }
 }
 
 @keyframes fade {
