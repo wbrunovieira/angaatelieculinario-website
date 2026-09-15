@@ -57,7 +57,7 @@ export function Preloader() {
         .to(
           "[data-curtain]",
           {
-            clipPath: "inset(0 0 100% 0)",
+            yPercent: -100,
             duration: 1.1,
             ease: "power4.inOut",
             onStart: finish,
@@ -75,7 +75,7 @@ export function Preloader() {
 
   return (
     <div ref={scope} className="fixed inset-0 z-[100]" aria-hidden>
-      <div data-curtain className="absolute inset-0 bg-mata text-linho" style={{ clipPath: "inset(0 0 0 0)" }}>
+      <div data-curtain className="absolute inset-0 bg-mata text-linho will-change-transform">
         <div className="absolute inset-x-0 bottom-[38%] px-5 md:px-10">
           <p className="display display-italic flex overflow-hidden pb-[0.14em] text-[clamp(5rem,16vw,15rem)] leading-[0.9]">
             {WORD.map((ch, i) => (

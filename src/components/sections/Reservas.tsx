@@ -44,7 +44,7 @@ export function Reservas() {
             <Magnetic>
               <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-barro" data-cursor="">
                 Reservar pelo WhatsApp
-                <span className="text-linho/80">{site.phoneDisplay}</span>
+                <span>{site.phoneDisplay}</span>
               </a>
             </Magnetic>
           </Reveal>

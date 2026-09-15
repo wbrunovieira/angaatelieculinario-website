@@ -38,6 +38,8 @@ export function Reveal({ as: Tag = "div", className, children, mode = "lines", d
           type: "lines",
           mask: "lines",
           autoSplit: true,
+          // Sem aria-label: em <p>/<blockquote> o atributo é proibido; os spans já carregam o texto.
+          aria: "none",
           onSplit: (self) =>
             gsap.from(self.lines, {
               yPercent: 110,

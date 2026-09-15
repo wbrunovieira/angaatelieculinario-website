@@ -17,20 +17,29 @@ const links = [
 ];
 
 // Barra fixa em mix-blend-difference (contraste em qualquer fundo) e um menu
-// em tela cheia que desce como cortina, com os capítulos em serifa grande.
+// em tela cheia que desce como cortina (transform), com os capítulos em serifa grande.
 export function Nav() {
   const [open, setOpen] = useState(false);
   const overlay = useRef<HTMLDivElement>(null);
+  const toggle = useRef<HTMLButtonElement>(null);
   const tl = useRef<gsap.core.Timeline>(null);
   const foto = photos.salao_luz_tarde_mesa;
 
   useGSAP(
     () => {
       const reduce = reducedMotion();
+      // Estado inicial via GSAP (e não style inline) para o yPercent não somar com um translate fixo.
+      gsap.set(overlay.current, { yPercent: -100 });
       tl.current = gsap
-        .timeline({ paused: true, defaults: { ease: "power4.inOut" } })
+        .timeline({
+          paused: true,
+          defaults: { ease: "power4.inOut" },
+          onReverseComplete: () => {
+            if (overlay.current) overlay.current.style.visibility = "hidden";
+          },
+        })
         .set(overlay.current, { pointerEvents: "auto" })
-        .fromTo(overlay.current, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: reduce ? 0 : 0.9 })
+        .to(overlay.current, { yPercent: 0, duration: reduce ? 0 : 0.9 })
         .from("[data-menu-link]", { yPercent: 110, duration: reduce ? 0 : 0.9, stagger: 0.06, ease: "power4.out" }, "-=0.45")
         .from("[data-menu-side]", { opacity: 0, y: 20, duration: reduce ? 0 : 0.8, ease: "power3.out" }, "-=0.7");
     },
@@ -39,9 +48,11 @@ export function Nav() {
 
   useEffect(() => {
     if (open) {
+      if (overlay.current) overlay.current.style.visibility = "visible";
       tl.current?.timeScale(1).play();
       window.__lenis?.stop();
       document.documentElement.classList.add("is-menu");
+      overlay.current?.querySelector<HTMLElement>("[data-menu-link]")?.focus({ preventScroll: true });
     } else {
       tl.current?.timeScale(1.6).reverse();
       window.__lenis?.start();
@@ -50,10 +61,19 @@ export function Nav() {
   }, [open]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      toggle.current?.focus();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  const close = () => {
+    setOpen(false);
+    toggle.current?.focus({ preventScroll: true });
+  };
 
   return (
     <>
@@ -61,20 +81,21 @@ export function Nav() {
         data-hero-nav
         className={`fixed inset-x-0 top-0 z-50 text-linho ${open ? "" : "mix-blend-difference"}`}
       >
-        <nav className="flex items-center justify-between px-5 py-5 md:px-10">
+        <nav aria-label="Principal" className="flex items-center justify-between px-5 py-5 md:px-10">
           <Link href="#" className="display display-italic text-2xl leading-none" aria-label="Angá, início" onClick={() => setOpen(false)}>
             Angá
           </Link>
           <div className="flex items-center gap-8 text-sm">
-            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="link-quiet hidden sm:inline" data-cursor="Reservar">
+            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="link-quiet hidden py-2 sm:inline" data-cursor="Reservar">
               Reservar
             </a>
             <button
+              ref={toggle}
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu"
-              className="link-quiet"
+              className="link-quiet py-2"
             >
               {open ? "Fechar" : "Menu"}
             </button>
@@ -85,8 +106,11 @@ export function Nav() {
       <div
         id="menu"
         ref={overlay}
-        className="pointer-events-none fixed inset-0 z-40 bg-mata text-linho"
-        style={{ clipPath: "inset(0 0 100% 0)" }}
+        role="dialog"
+        aria-modal={open}
+        aria-label="Menu do site"
+        className="pointer-events-none fixed inset-0 z-40 bg-mata text-linho will-change-transform"
+        style={{ visibility: "hidden" }}
         aria-hidden={!open}
       >
         <div className="grid h-full grid-cols-12 items-end gap-8 px-5 pb-10 pt-24 md:px-10 md:pb-14">
@@ -96,11 +120,11 @@ export function Nav() {
                 <a
                   href={l.href}
                   data-menu-link
-                  onClick={() => setOpen(false)}
+                  onClick={close}
                   className="display block py-1 text-[clamp(2.4rem,7vw,6.5rem)] leading-[1.05] transition-opacity hover:opacity-60"
                   tabIndex={open ? 0 : -1}
                 >
-                  <span className="running-head mr-4 align-top text-linho/50">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="running-head mr-4 align-top text-linho/70">{String(i + 1).padStart(2, "0")}</span>
                   {l.label}
                 </a>
               </li>
@@ -110,7 +134,7 @@ export function Nav() {
             <div className="relative aspect-[4/5] overflow-hidden">
               <Image src={foto.src} alt="" fill sizes="30vw" placeholder="blur" blurDataURL={foto.blur} className="object-cover" />
             </div>
-            <dl className="mt-6 space-y-1 text-sm text-linho/80">
+            <dl className="mt-6 space-y-1 text-sm text-linho/85">
               {site.hours.map((h) => (
                 <div key={h.day} className="flex justify-between gap-4">
                   <dt>{h.day}</dt>
@@ -118,10 +142,10 @@ export function Nav() {
                 </div>
               ))}
             </dl>
-            <p className="mt-6 text-sm text-linho/60">
+            <p className="mt-6 text-sm text-linho/70">
               {site.address.street}, {site.address.neighborhood}, {site.address.city}
             </p>
-            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="link-quiet mt-2 inline-block text-sm" tabIndex={open ? 0 : -1}>
+            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="link-quiet mt-2 inline-block py-1 text-sm" tabIndex={open ? 0 : -1}>
               Reservar pelo WhatsApp {site.phoneDisplay}
             </a>
           </div>

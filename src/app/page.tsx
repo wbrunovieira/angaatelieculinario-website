@@ -15,10 +15,13 @@ import { Reservas } from "@/components/sections/Reservas";
 export default function Home() {
   return (
     <>
+      <a href="#conteudo" className="skip-link">
+        Pular para o conteúdo
+      </a>
       <Preloader />
       <Cursor />
       <Nav />
-      <main>
+      <main id="conteudo">
         <Hero />
         <Manifesto />
         <Etapas />

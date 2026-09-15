@@ -29,7 +29,7 @@ export function Hero() {
         }
         const root = wrap.current!;
         const title = SplitText.create(root.querySelector("[data-hero-title]")!, { type: "chars" });
-        const tag = SplitText.create(root.querySelector("[data-hero-tag]")!, { type: "lines", mask: "lines" });
+        const tag = SplitText.create(root.querySelector("[data-hero-tag]")!, { type: "lines", mask: "lines", aria: "none" });
         const nav = document.querySelector("[data-hero-nav]");
         const tl = gsap
           .timeline({ defaults: { ease: "power4.out" } })

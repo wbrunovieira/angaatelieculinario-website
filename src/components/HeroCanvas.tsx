@@ -136,16 +136,14 @@ export function HeroCanvas({ src, progressRef, onReady }: Props) {
       onReady?.();
     };
 
-    let visible = true;
-    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0 });
-    io.observe(canvas);
-
+    // O loop só roda enquanto o hero está na tela; fora dela, para de verdade.
     let raf = 0;
+    let running = false;
     const start = performance.now();
     let zoomStart: number | null = null;
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
-      if (!visible || !ready) return;
+      if (!ready) return;
       const t = (now - start) / 1000;
       if (zoomStart === null) zoomStart = t;
       const zt = Math.min((t - zoomStart) / 7, 1);
@@ -167,7 +165,19 @@ export function HeroCanvas({ src, progressRef, onReady }: Props) {
       program.uniforms.uReveal.value = Math.min(1, program.uniforms.uReveal.value + 0.03);
       renderer.render({ scene: mesh });
     };
-    raf = requestAnimationFrame(loop);
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && !running) {
+          running = true;
+          raf = requestAnimationFrame(loop);
+        } else if (!e.isIntersecting && running) {
+          running = false;
+          cancelAnimationFrame(raf);
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(canvas);
 
     // Não perde o contexto aqui: no StrictMode o efeito roda duas vezes no mesmo canvas
     // e um contexto perdido não volta. Só para o loop e solta os recursos.

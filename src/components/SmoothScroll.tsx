@@ -10,7 +10,7 @@ export function SmoothScroll() {
   useEffect(() => {
     if (reducedMotion()) return;
 
-    const lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.085, smoothWheel: true, anchors: { offset: -8 } });
     window.__lenis = lenis;
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);

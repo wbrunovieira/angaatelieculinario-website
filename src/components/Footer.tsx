@@ -24,7 +24,7 @@ export function Footer() {
           </li>
         </ul>
       </div>
-      <p className="mt-12 text-xs text-linho/45">
+      <p className="mt-12 text-xs text-linho/60">
         Fotos de {site.photoCredits.join(", ")}. © {new Date().getFullYear()} {site.name}.
       </p>
     </footer>

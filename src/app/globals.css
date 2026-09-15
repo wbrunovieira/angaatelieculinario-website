@@ -5,8 +5,8 @@
   --color-linho-escuro: #e2dbcb;
   --color-mata: #22301f;
   --color-mata-clara: #2e3f2a;
-  --color-barro: #a8672b;
-  --color-samambaia: #6e7c4a;
+  --color-barro: #8f551f;
+  --color-samambaia: #586638;
   --color-fumaca: #c9c2b2;
 
   --font-display: var(--font-fraunces), Georgia, serif;
@@ -16,13 +16,25 @@
 }
 
 @layer base {
-  html {
+  /* Sem Lenis (reduced-motion), o navegador faz a rolagem suave dos links âncora. */
+  html:not(.lenis) {
     scroll-behavior: smooth;
   }
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
+  }
+  /* CSS recomendado pelo Lenis. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
   }
   body {
     @apply bg-linho text-mata font-sans antialiased;
@@ -34,8 +46,22 @@
     color: var(--color-linho);
   }
   :focus-visible {
-    outline: 2px solid var(--color-barro);
+    outline: 2px solid currentColor;
     outline-offset: 4px;
+  }
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 130;
+    padding: 0.75rem 1.25rem;
+    background: var(--color-mata);
+    color: var(--color-linho);
+    border-radius: 999px;
+    transform: translateY(-200%);
+  }
+  .skip-link:focus-visible {
+    transform: none;
   }
 }
 
@@ -93,7 +119,7 @@
     transition: transform 0.4s var(--ease-out-soft), background-color 0.3s;
   }
   .btn-barro:hover {
-    background-color: #b8733a;
+    background-color: #a0612a;
     transform: translateY(-2px);
   }
   .hairline {
@@ -152,7 +178,7 @@ html.has-cursor .cursor-dot {
 /* Grão de filme, bem sutil, sobre tudo. */
 .grain {
   position: fixed;
-  inset: -50%;
+  inset: -6%;
   z-index: 110;
   pointer-events: none;
   opacity: 0.045;
@@ -164,10 +190,10 @@ html.has-cursor .cursor-dot {
     transform: translate(0, 0);
   }
   25% {
-    transform: translate(-3%, 2%);
+    transform: translate(-2%, 1.5%);
   }
   50% {
-    transform: translate(2%, -3%);
+    transform: translate(1.5%, -2%);
   }
   75% {
     transform: translate(-1%, -1%);
