@@ -48,6 +48,23 @@ export function Hero() {
 
       if (reduce) return;
 
+      // Profundidade: o texto desliza no sentido oposto ao da foto, bem pouco.
+      if (window.matchMedia("(pointer: fine)").matches) {
+        const ui = wrap.current!.querySelector("[data-hero-ui]");
+        const x = gsap.quickTo(ui, "x", { duration: 1.2, ease: "power3" });
+        const y = gsap.quickTo(ui, "y", { duration: 1.2, ease: "power3" });
+        const move = (e: PointerEvent) => {
+          x((e.clientX / window.innerWidth - 0.5) * 14);
+          y((e.clientY / window.innerHeight - 0.5) * 8);
+        };
+        window.addEventListener("pointermove", move, { passive: true });
+        const cleanupMove = () => window.removeEventListener("pointermove", move);
+        return () => {
+          cleanupMove();
+          window.removeEventListener(INTRO_EVENT, intro);
+        };
+      }
+
       // Rolagem: título cresce e dissolve, texto some, canvas escurece via progressRef.
       gsap
         .timeline({

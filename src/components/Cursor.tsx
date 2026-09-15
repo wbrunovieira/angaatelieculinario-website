@@ -19,7 +19,13 @@ export function Cursor() {
 
     const x = gsap.quickTo(el, "x", { duration: 0.35, ease: "power3" });
     const y = gsap.quickTo(el, "y", { duration: 0.35, ease: "power3" });
-    const scale = gsap.quickTo(el, "scale", { duration: 0.4, ease: "power3" });
+    // quickTo não aceita "scale" (vira scaleX/scaleY por dentro); um quickTo por eixo.
+    const sx = gsap.quickTo(el, "scaleX", { duration: 0.4, ease: "power3" });
+    const sy = gsap.quickTo(el, "scaleY", { duration: 0.4, ease: "power3" });
+    const scale = (v: number) => {
+      sx(v);
+      sy(v);
+    };
 
     gsap.set(el, { opacity: 0 });
     let shown = false;

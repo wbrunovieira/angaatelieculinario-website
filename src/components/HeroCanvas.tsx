@@ -14,8 +14,9 @@ const vertex = /* glsl */ `
   }
 `;
 
-// A foto parada ganha vida: fluxo lento, ondulação que segue o cursor,
-// leve aberração cromática no rastro, zoom contínuo e escurecimento ao rolar.
+// A foto parada ganha vida sem deformar: zoom lento, brisa quase imperceptível,
+// profundidade pelo mouse (a imagem desliza contra o cursor) e uma luz quente
+// que acompanha o ponteiro, como a lanterna da varanda. Escurece ao rolar.
 const fragment = /* glsl */ `
   precision highp float;
   uniform sampler2D uTexture;
@@ -41,19 +42,19 @@ const fragment = /* glsl */ `
   void main() {
     vec2 uv = vUv;
     float aspect = uResolution.x / uResolution.y;
-    vec2 d = (uv - uMouse) * vec2(aspect, 1.0);
-    float dist = length(d);
-    float influence = smoothstep(0.5, 0.0, dist) * uVelocity;
-    vec2 dir = d / max(dist, 0.0001);
-    float ripple = sin(dist * 26.0 - uTime * 3.0) * 0.5 + 0.5;
-    uv -= dir * influence * (0.04 + ripple * 0.02);
-    uv += vec2(sin(uv.y * 5.0 + uTime * 0.35), cos(uv.x * 4.0 + uTime * 0.28)) * 0.0016;
 
-    float ca = influence * 0.008;
-    float r = texture2D(uTexture, cover(uv + dir * ca)).r;
-    float g = texture2D(uTexture, cover(uv)).g;
-    float b = texture2D(uTexture, cover(uv - dir * ca)).b;
-    vec3 col = vec3(r, g, b);
+    // Brisa: balanço mínimo, sem mouse.
+    uv += vec2(sin(uv.y * 4.0 + uTime * 0.3), cos(uv.x * 3.0 + uTime * 0.25)) * 0.0007;
+    // Profundidade: a foto desliza levemente contra o cursor.
+    uv += (uMouse - 0.5) * vec2(-0.018, -0.012);
+
+    vec3 col = texture2D(uTexture, cover(uv)).rgb;
+
+    // Luz quente que acompanha o ponteiro, ampla e suave.
+    vec2 d = (vUv - uMouse) * vec2(aspect, 1.0);
+    float light = smoothstep(0.75, 0.0, length(d)) * uVelocity;
+    col *= 1.0 + light * 0.14;
+    col += vec3(0.05, 0.035, 0.0) * light;
 
     float v = smoothstep(1.25, 0.3, length((vUv - 0.5) * vec2(1.0, 1.25)));
     col *= mix(0.8, 1.0, v);
@@ -117,13 +118,16 @@ export function HeroCanvas({ src, progressRef, onReady }: Props) {
 
     const target = { x: 0.5, y: 0.5 };
     const mouse = { x: 0.5, y: 0.5 };
-    let velocity = 0;
-    let last = { x: 0.5, y: 0.5 };
+    let presence = 0;
+    let presenceTarget = 0;
     const onMove = (e: PointerEvent) => {
       target.x = e.clientX / window.innerWidth;
       target.y = 1 - e.clientY / window.innerHeight;
+      presenceTarget = 1;
     };
+    const onLeave = () => (presenceTarget = 0);
     window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
 
     let ready = false;
     const img = new Image();
@@ -149,17 +153,15 @@ export function HeroCanvas({ src, progressRef, onReady }: Props) {
       const zt = Math.min((t - zoomStart) / 7, 1);
       const eased = 1 - Math.pow(1 - zt, 3);
 
-      mouse.x += (target.x - mouse.x) * 0.08;
-      mouse.y += (target.y - mouse.y) * 0.08;
-      const dx = mouse.x - last.x;
-      const dy = mouse.y - last.y;
-      last = { ...mouse };
-      velocity = Math.min(1, velocity * 0.92 + Math.hypot(dx, dy) * 9);
+      // Lerp lento: a imagem "pesa", nunca acompanha o cursor de imediato.
+      mouse.x += (target.x - mouse.x) * 0.045;
+      mouse.y += (target.y - mouse.y) * 0.045;
+      presence += (presenceTarget - presence) * 0.04;
 
       const p = progressRef.current ?? 0;
       program.uniforms.uTime.value = t;
       program.uniforms.uMouse.value = [mouse.x, mouse.y];
-      program.uniforms.uVelocity.value = velocity;
+      program.uniforms.uVelocity.value = presence;
       program.uniforms.uZoom.value = 1.18 - 0.14 * eased + p * 0.18;
       program.uniforms.uDim.value = p;
       program.uniforms.uReveal.value = Math.min(1, program.uniforms.uReveal.value + 0.03);
@@ -186,6 +188,7 @@ export function HeroCanvas({ src, progressRef, onReady }: Props) {
       io.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
       program.remove();
       geometry.remove();
       gl.deleteTexture(texture.texture);
